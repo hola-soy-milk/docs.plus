@@ -23,7 +23,7 @@ backup:
   runtime: node
   start: npm run backup
   install:
-    command: cd backup && npm install
+    command: cd ./backup/backup-pg-to-s3 && npm install
     watch:
       - yarn.lock
   dev:
