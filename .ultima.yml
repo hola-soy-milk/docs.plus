@@ -23,7 +23,7 @@ backup:
   runtime: node
   start: npm run backup
   install:
-    command: npm install
+    command: cd backup && npm install
     watch:
       - yarn.lock
   dev:
