@@ -25,6 +25,9 @@
   "homepage": "https://github.com/samirsayyad/backup-pg-to-s3#readme",
   "dependencies": {
     "aws-sdk": "^2.737.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "node-cron": "^2.0.3"
   }
 }
