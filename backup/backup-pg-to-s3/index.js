@@ -16,10 +16,10 @@ cron.schedule("* * * * *", function() {
 });
 
 ///////////////////////////////////////////////////////////
-// var mainController = require("./controller/mainController");
-// var controllerInstance = new mainController();
-// controllerInstance.runBackup()
-// .then(()=>{
-//     console.log("here")
-//     controllerInstance.runUpload()
-// })
+var mainController = require("./controller/mainController");
+var controllerInstance = new mainController();
+controllerInstance.runBackup()
+.then(()=>{
+    console.log("going to upload ")
+    controllerInstance.runUpload()
+})
