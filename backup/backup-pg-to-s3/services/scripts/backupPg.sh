@@ -8,7 +8,8 @@ echo "Checking Credentials before starting backup"
 : ${args[4]:?"Need to set PGPASSWORD non-empty?"}
 
 mkdir backup_dump
-dump_command="pg_dump -j 12 -Fd -f backup_dump ${args} '${args[2]}' --verbose" 
+#dump_command="pg_dump -j 12 -Fd -f backup_dump ${args} '${args[2]}' --verbose" 
+dump_command="docker exec postgres pg_dump -U postgres -F t my_db | gzip >/backups/my_db-$(date +%Y-%m-%d).tar.gz"
 echo "Starting ${dump_command}"
 eval $dump_command
 backup_folder=`ls backup_dump/ | wc -l`
