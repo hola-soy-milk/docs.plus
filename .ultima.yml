@@ -31,4 +31,4 @@ backup:
     back-sync: node_modules
     watch:
       - "*.js"
-  build: docker pull pwim/pg_dump_to_s3
+  build: docker pull boris42/pg_dump
