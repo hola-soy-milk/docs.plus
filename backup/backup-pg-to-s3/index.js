@@ -10,7 +10,7 @@ console.log("going to run a task every minute");
 cron.schedule("* * * * *", function() {
     console.log("running a task every minute");
 });
-app.listen(3128);
+app.listen(process.env.PORT);
 
 ///////////////////////////////////////////////////////////
 // var mainController = require("./controller/mainController");
