@@ -99,8 +99,6 @@ exports.restartServer = function () {
     next();
   });
 
-  app.get('/health', (req, res) => res.json(true))
-
   if (settings.trustProxy) {
     /*
      * If 'trust proxy' === true, the client’s IP address in req.ip will be the
@@ -113,7 +111,6 @@ exports.restartServer = function () {
 
   hooks.callAll("expressConfigure", {"app": app});
   hooks.callAll("expressCreateServer", {"app": app, "server": server});
-
 
   server.listen(settings.port, settings.ip);
 }

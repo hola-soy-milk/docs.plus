@@ -3,7 +3,6 @@ var eejs = require('ep_etherpad-lite/node/eejs');
 var toolbar = require("ep_etherpad-lite/node/utils/toolbar");
 var hooks = require('ep_etherpad-lite/static/js/pluginfw/hooks');
 var settings = require('../../utils/Settings');
-var db = require("../../db/DB");
 
 exports.expressCreateServer = function (hook_name, args, cb) {
   // expose current stats
@@ -23,8 +22,24 @@ exports.expressCreateServer = function (hook_name, args, cb) {
     res.send(eejs.require("ep_etherpad-lite/templates/javascript.html"));
   });
 
+
+  //serve robots.txt
+  args.app.get('/robots.txt', function(req, res)
+  {
+    var filePath = path.join(settings.root, "src", "static", "skins", settings.skinName, "robots.txt");
+    res.sendFile(filePath, function(err)
+    {
+      //there is no custom robots.txt, send the default robots.txt which dissallows all
+      if(err)
+      {
+        filePath = path.join(settings.root, "src", "static", "robots.txt");
+        res.sendFile(filePath);
+      }
+    });
+  });
+
   //serve pad.html under /p
-  args.app.get('/p/:pad', async function(req, res, next)
+  args.app.get('/p/:pad', function(req, res, next)
   {
     // The below might break for pads being rewritten
     var isReadOnly = req.url.indexOf("/p/r.") === 0;
@@ -33,31 +48,12 @@ exports.expressCreateServer = function (hook_name, args, cb) {
       toolbar: toolbar,
       isReadOnly: isReadOnly
     });
-    // @Samir Sayyad Added for social preview
-    let pad_title = await db.get("title:"+req.params.pad) ;
-    //console.log("Found ", pad_title, " for ", req.params.pad);
-  
+
     res.send(eejs.require("ep_etherpad-lite/templates/pad.html", {
-      meta : { title : (pad_title) ? pad_title :req.params.pad } ,
       req: req,
       toolbar: toolbar,
       isReadOnly: isReadOnly
     }));
-  });
-
-  //serve robots.txt
-  args.app.get('/robots.txt', function(req, res)
-  {
-    var filePath = path.join(settings.root, "src", "static", "skins", settings.skinName, "robots.txt");
-    res.sendFile(filePath, function(err)
-    {
-      //there is no custom favicon, send the default robots.txt which dissallows all
-      if(err)
-      {
-        filePath = path.join(settings.root, "src", "static", "robots.txt");
-        res.sendFile(filePath);
-      }
-    });
   });
 
   //serve timeslider.html under /p/$padname/timeslider
