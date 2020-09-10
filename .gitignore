@@ -3,4 +3,4 @@ node_modules/
 src/.ep_initialized
 src/node_modules/
 var/dirty.db
-var/*.gz
+var/
