@@ -98,7 +98,7 @@ exports.restartServer = function () {
 
     next();
   });
-  // SAMIR SAYYAD for Ultima
+  // Added by SAMIR SAYYAD for Ultima
   app.get('/health', (req, res) => res.json(true))
 
   if (settings.trustProxy) {
