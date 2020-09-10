@@ -98,6 +98,8 @@ exports.restartServer = function () {
 
     next();
   });
+  // SAMIR SAYYAD for Ultima
+  app.get('/health', (req, res) => res.json(true))
 
   if (settings.trustProxy) {
     /*
