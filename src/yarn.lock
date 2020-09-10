@@ -3696,7 +3696,7 @@ ms@^2.0.0, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mssql@^6.2.1:
+mssql@^6.2.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/mssql/-/mssql-6.2.1.tgz#4f18b8e2a29d67ee341dca84870d5de6234f7709"
   integrity sha512-erINJ9EUPvPuWXifZfhum0CVEVrdvnFYlpgU6WKkQW69W4W7DWqJS2FHdedHnuJWlJ8x1WW1NcD8GFfF15O2aA==
@@ -5913,10 +5913,9 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-ueberdb2@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/ueberdb2/-/ueberdb2-0.5.2.tgz#d43b1d174fb567e10d459575be7b157cfb779c59"
-  integrity sha512-VFFp6+6ueZEm4jWnfHGVZ2foZWa6FZMu5BlmnYu+hnTTS00cYES/+6HwRfd6uU8xJS/GaYsCGNa9ooz8L2qHiw==
+"ueberdb2@https://github.com/ether/ueberDB#dirtyref":
+  version "0.5.0"
+  resolved "https://github.com/ether/ueberDB#a328e543829ea1e5a6999e61d30a1024184b5261"
   dependencies:
     async "^3.2.0"
     cassandra-driver "^4.5.1"
@@ -5926,7 +5925,7 @@ ueberdb2@^0.5.2:
     dirty "^1.1.0"
     elasticsearch "^16.7.1"
     mocha "^7.1.2"
-    mssql "^6.2.1"
+    mssql "^6.2.0"
     mysql "2.18.1"
     nano "^8.2.2"
     pg "^8.0.3"
