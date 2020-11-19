@@ -36,4 +36,4 @@ jobs:
       ACCESS_KEY_ID : ${{secrets.ACCESS_KEY_ID}}
       DB_TYPE : postgres
       DB_PORT : ${{secrets.PG_PORT}}
-      PORT : 8001,
+      PORT : 8001
