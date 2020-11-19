@@ -152,11 +152,11 @@
    */
 
   
-  "ssl" : {
-            "key"  : "/etc/nginx/ssl/ssl-handbook-key.key",
-            "cert" : "/etc/nginx/ssl/ssl-handbook-crt.crt",
-            "ca": ["/path-to-your/epl-intermediate-cert1.crt", "/path-to-your/epl-intermediate-cert2.crt"]
-          },
+  // "ssl" : {
+  //           "key"  : "/etc/nginx/ssl/ssl-handbook-key.key",
+  //           "cert" : "/etc/nginx/ssl/ssl-handbook-crt.crt",
+  //           "ca": ["/path-to-your/epl-intermediate-cert1.crt", "/path-to-your/epl-intermediate-cert2.crt"]
+  //         },
   
 
   /*
