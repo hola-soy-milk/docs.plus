@@ -1327,9 +1327,10 @@ function Ace2Inner(editorInfo) {
   const insertDomLines = (nodeToAddAfter, infoStructs) => {
     let lastEntry;
     let lineStartOffset;
-    if (infoStructs.length < 1) return;
+    let initialInsert = false
     infoStructs.length === 1 ? initialInsert = false : initialInsert = true;
-
+    
+    if (infoStructs.length < 1) return;
     infoStructs.forEach((info) => {
       const p2 = PROFILER('insertLine', false); // eslint-disable-line new-cap
       const node = info.node;
