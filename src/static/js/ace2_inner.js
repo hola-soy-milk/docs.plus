@@ -1319,23 +1319,27 @@ function Ace2Inner(editorInfo) {
   const isDefaultLineAttribute =
       (aname) => AttributeManager.DEFAULT_LINE_ATTRIBUTES.indexOf(aname) !== -1;
 
-    let lastHtag;
-    let _nextHeaderId = 1;
-    const htags = ["H1", "H2", "H3", "H4", "H5", "H6"]
-    const uniqueHeaderId = () => _nextHeaderId++;
-    const walkToClosestNextHeader = (node, func) => {
-      if(node&&node.nextSibling) {
-        node = node.nextSibling;
-        if(htags.includes(node.firstChild.nodeName)) {
-          // top.console.log("add new classs")
-          node.classList.add("last")
-          return
-        };
-        func(node);
-        walkToClosestNextHeader(node, func);
-      }
-    }
 
+  // heading hierarchy
+  // By @Hossein
+  let lastHtag;
+  let _nextHeaderId = 1;
+  const htags = ["H1", "H2", "H3", "H4", "H5", "H6"]
+  const uniqueHeaderId = () => _nextHeaderId++;
+  const walkToClosestNextHeader = (node, func) => {
+    if(node&&node.nextSibling) {
+      node = node.nextSibling;
+      if(htags.includes(node.firstChild.nodeName)) {
+        // top.console.log("add new classs")
+        node.classList.add("last")
+        return
+      };
+      func(node);
+      walkToClosestNextHeader(node, func);
+    }
+  }
+
+  // By @Hossein
   const insertDomLines = (nodeToAddAfter, infoStructs) => {
     let lastEntry;
     let lineStartOffset;
