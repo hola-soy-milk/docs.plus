@@ -183,7 +183,7 @@ const getUrlVars = () => {
 
 const sendClientReady = (isReconnect, messageType) => {
   messageType = typeof messageType !== 'undefined' ? messageType : 'CLIENT_READY';
-  let padId = document.location.pathname.substring(document.location.pathname.lastIndexOf('/') + 1);
+  let padId = clientVars.padId; // @Hossein
   // unescape neccesary due to Safari and Opera interpretation of spaces
   padId = decodeURIComponent(padId);
 
@@ -299,7 +299,7 @@ const handshake = () => {
       receivedClientVars = true;
 
       // set some client vars
-      window.clientVars = obj.data;
+      window.clientVars = Object.assign(obj.data, clientVars); // @Hossein
 
       // initialize the pad
       pad._afterHandshake();

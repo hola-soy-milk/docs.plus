@@ -43,6 +43,8 @@ const Ace2Editor = function () {
   window.ace2EditorInfo = info; // Make it accessible to iframes.
   let loaded = false;
 
+  const staticRoot = clientVars.staticRootAddress;
+
   let actionsPendingInit = [];
 
   const pendingInit = (func) => function (...args) {
@@ -111,7 +113,7 @@ const Ace2Editor = function () {
 
   const pushStyleTagsFor = (buffer, files) => {
     for (const file of files) {
-      buffer.push(`<link rel="stylesheet" type="text/css" href="${absUrl(encodeURI(file))}"/>`);
+      buffer.push(`<link rel="stylesheet" type="text/css" href="${absUrl(staticRoot + encodeURI(file))}"/>`);
     }
   };
 
@@ -127,12 +129,12 @@ const Ace2Editor = function () {
     this.importText(initialCode);
 
     const includedCSS = [
-      '../static/css/iframe_editor.css',
-      `../static/css/pad.css?v=${clientVars.randomVersionString}`,
+      `${staticRoot}static/css/iframe_editor.css`,
+      `${staticRoot}static/css/pad.css?v=${clientVars.randomVersionString}`,
       ...hooks.callAll('aceEditorCSS').map(
           // Allow urls to external CSS - http(s):// and //some/path.css
-          (p) => /\/\//.test(p) ? p : `../static/plugins/${p}`),
-      `../static/skins/${clientVars.skinName}/pad.css?v=${clientVars.randomVersionString}`,
+          (p) => /\/\//.test(p) ? p : `${staticRoot}static/plugins/${p}`),
+      `${staticRoot}static/skins/${clientVars.skinName}/pad.css?v=${clientVars.randomVersionString}`,
     ];
 
     const doctype = '<!doctype html>';
@@ -143,11 +145,11 @@ const Ace2Editor = function () {
     iframeHTML.push(`<html class='inner-editor ${clientVars.skinVariants}'><head>`);
     pushStyleTagsFor(iframeHTML, includedCSS);
     const requireKernelUrl =
-        absUrl(`../static/js/require-kernel.js?v=${clientVars.randomVersionString}`);
+        absUrl(`${staticRoot}static/js/require-kernel.js?v=${clientVars.randomVersionString}`);
     iframeHTML.push(`<script type="text/javascript" src="${requireKernelUrl}"></script>`);
     // Pre-fetch modules to improve load performance.
     for (const module of ['ace2_inner', 'ace2_common']) {
-      const url = absUrl(`../javascripts/lib/ep_etherpad-lite/static/js/${module}.js` +
+      const url = absUrl(`${staticRoot}javascripts/lib/ep_etherpad-lite/static/js/${module}.js` +
                          `?callback=require.define&v=${clientVars.randomVersionString}`);
       iframeHTML.push(`<script type="text/javascript" src="${url}"></script>`);
     }
@@ -155,8 +157,8 @@ const Ace2Editor = function () {
     iframeHTML.push(scriptTag(`(async () => {
       parent.parent.debugLog('Ace2Editor.init() inner frame ready');
       const require = window.require;
-      require.setRootURI(${JSON.stringify(absUrl('../javascripts/src'))});
-      require.setLibraryURI(${JSON.stringify(absUrl('../javascripts/lib'))});
+      require.setRootURI(${JSON.stringify(absUrl(staticRoot+'javascripts/src'))});
+      require.setLibraryURI(${JSON.stringify(absUrl(staticRoot+'javascripts/lib'))});
       require.setGlobalKeyPath('require');
 
       // intentially moved before requiring client_plugins to save a 307

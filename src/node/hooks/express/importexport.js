@@ -9,6 +9,7 @@ const readOnlyManager = require('../../db/ReadOnlyManager');
 const rateLimit = require('express-rate-limit');
 const securityManager = require('../../db/SecurityManager');
 const webaccess = require('./webaccess');
+const padInfo = require('../../utils/nestedPad'); // @Hossein
 
 exports.expressCreateServer = (hookName, args, cb) => {
   settings.importExportRateLimiting.onLimitReached = (req, res, options) => {
@@ -20,10 +21,14 @@ exports.expressCreateServer = (hookName, args, cb) => {
   const limiter = rateLimit(settings.importExportRateLimiting);
 
   // handle export requests
-  args.app.use('/p/:pad/:rev?/export/:type', limiter);
-  args.app.get('/p/:pad/:rev?/export/:type', (req, res, next) => {
+  args.app.use('/p/:pad*/:rev(\\d+)?/export/:type', limiter); // @Hossein
+  args.app.get('/p/:pad*/:rev(\\d+)?/export/:type', (req, res, next) => { // @Hossein
     (async () => {
       const types = ['pdf', 'doc', 'txt', 'html', 'odt', 'etherpad'];
+      // @Hossein
+      const {padId} = padInfo(req);
+      req.params.pad = padId;
+
       // send a 404 if we don't support this filetype
       if (types.indexOf(req.params.type) === -1) {
         return next();
@@ -66,10 +71,15 @@ exports.expressCreateServer = (hookName, args, cb) => {
   });
 
   // handle import requests
-  args.app.use('/p/:pad/import', limiter);
-  args.app.post('/p/:pad/import', (req, res, next) => {
+  args.app.use('/p/:pad*/import', limiter); // @Hossein
+  args.app.post('/p/:pad*/import', (req, res, next) => { // @Hossein
     (async () => {
       const {session: {user} = {}} = req;
+
+      // @Hossein
+      const {padId} = padInfo(req);
+      req.params.pad = padId;
+      
       const {accessStatus} = await securityManager.checkAccess(
           req.params.pad, req.cookies.sessionID, req.cookies.token, user);
       if (accessStatus !== 'grant' || !webaccess.userCanModify(req.params.pad, req)) {
