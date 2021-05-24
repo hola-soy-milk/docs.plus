@@ -1453,7 +1453,7 @@ function Ace2Inner(editorInfo) {
           // if it's the last child of secction and the next node is h tag
           if(
             (nodeToAddAfter.nextSibling&& htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag'))) ||
-            (nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
+            (nodeToAddAfter.nextSibling&&nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
           ) {
             // top.console.log("yup this is wrong!")
             nodeToAddAfter.removeAttribute('node')
