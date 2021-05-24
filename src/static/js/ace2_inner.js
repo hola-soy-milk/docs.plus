@@ -1375,110 +1375,115 @@ function Ace2Inner(editorInfo) {
       info.prepareForAdd();
       entry.lineMarker = info.lineMarker;
 
-      //======================================//
-      //========= Header Catagorizer =========//
-      //======================================//
+      try {
+        //======================================//
+        //========= Header Catagorizer =========//
+        //======================================//
 
-      // top.console.log(node, nodeToAddAfter, hasHtagbefor , node.attributes,node.attributes.hasOwnProperty('tag'))
-      // by defualt assign first child nodeName as "tag" attribute
-      node.setAttribute("tag", node.firstChild.nodeName.toLowerCase());
+        // top.console.log(node, nodeToAddAfter, hasHtagbefor , node.attributes,node.attributes.hasOwnProperty('tag'))
+        // by defualt assign first child nodeName as "tag" attribute
+        node.setAttribute("tag", node.firstChild.nodeName.toLowerCase());
 
 
-      // If the node is H tags
-      // then assign uniqe header ID
-      if(htags.includes(node.firstChild.nodeName)) {
-     
-        // if it's a h tags
-        // node.classList.add("first")
-        node.setAttribute("node", "first")
-        nodeToAddAfter&&nodeToAddAfter.setAttribute("node", "last")
-        todo:
-
-        //TODO: if the last node remove the prev node must be mark
-        //TODO: if user press enter in h tag, headerId will be change, this should not happening.
-
-        // If it's the initaionl setup, and it's header
-        if(initialInsert){
-          const headerId = uniqueHeaderId()
-          lastHtag = headerId
-          node.setAttribute("wrapper", "header:"+headerId)
-          node._lastWrapperId = headerId
-        } else {
-          let newHeaderId = "haeder"+lastHtag;
-
-          const nodeAttrTag = node.getAttribute('tag')
-          const nodePrevAttrTag = nodeToAddAfter?nodeToAddAfter.getAttribute('tag'):undefined
-          const nodePreveNextSiblingAttrTag = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('tag'): undefined
-          const nodePrevNextSiblingAttrWrapper = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('wrapper'):undefined
-
-          // if the header is the first node of nodeList 
-            if(!nodeToAddAfter){
-            newHeaderId = root.firstChild.nextSibling.getAttribute('wrapper')
-          }
-        
-          // if node has the "wrapper" attribute
-          // if header has old id don't change it
-          if(nodePrevNextSiblingAttrWrapper) {
-            newHeaderId = nodePrevNextSiblingAttrWrapper
-          }
-
-          // if new header added
-          if(nodeAttrTag !== nodePrevAttrTag){
-            newHeaderId = "haeder:"+uniqueHeaderId()
-          }
-
-          // if user use backspace for remove header char
-          if(nodeAttrTag === nodePreveNextSiblingAttrTag ){
-            // this "nodeToAddAfter.nextElementSibling" is the old dom elemnt that removed
-            newHeaderId = nodePrevNextSiblingAttrWrapper
-          }
-
-          if(newHeaderId){
-            node.setAttribute("wrapper", newHeaderId)
-          }
-            
-        }
-      }
-
-      // if it's not header tag assign the wrraper id
-      if(lastHtag && !htags.includes(node.firstChild.nodeName)){
-        let wrapperId = "header:"+lastHtag
-        let nodeAttr = node.getAttribute('node')
-        if(nodeToAddAfter){
-          wrapperId = nodeToAddAfter.getAttribute('wrapper')
-        }
-
-        if(wrapperId) node.setAttribute("wrapper", wrapperId)
-
-        // if it's the last child of secction and the next node is h tag
-        if(
-          htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag')) ||
-          (nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
-        ) {
-          // top.console.log("yup this is wrong!")
-          nodeToAddAfter.removeAttribute('node')
-          node.setAttribute("node", "last")
-        }
-        
-      }
+        // If the node is H tags
+        // then assign uniqe header ID
+        if(htags.includes(node.firstChild.nodeName)) {
       
-      if (!nodeToAddAfter) {
-        root.insertBefore(node, root.firstChild);
-      } else {
-        root.insertBefore(node, nodeToAddAfter.nextSibling);
-        const newNode = root.insertBefore(node, nodeToAddAfter.nextSibling);
-        const currentNodeWrapper = newNode.getAttribute('wrapper')
-        const nextNodeWrapper = nodeToAddAfter?nodeToAddAfter.getAttribute('wrapper') : undefined;
-        // if a text line change to header line
-        // if header line change to normal text line
-        // if it is header and it's a new header recursilvey append wrapper id
-        if(currentNodeWrapper !== nextNodeWrapper) {
-          // top.console.log("somethings bad is happening", currentNodeWrapper, nextNodeWrapper)
-          walkToClosestNextHeader(newNode.nextSibling, (nextDome) => {
-            if(currentNodeWrapper !== null) nextDome.setAttribute("wrapper", currentNodeWrapper)
-            else nextDome.removeAttribute("wrapper")
-          })
+          // if it's a h tags
+          // node.classList.add("first")
+          node.setAttribute("node", "first")
+          nodeToAddAfter&&nodeToAddAfter.setAttribute("node", "last")
+          todo:
+
+          //TODO: if the last node remove the prev node must be mark
+          //TODO: if user press enter in h tag, headerId will be change, this should not happening.
+
+          // If it's the initaionl setup, and it's header
+          if(initialInsert){
+            const headerId = uniqueHeaderId()
+            lastHtag = headerId
+            node.setAttribute("wrapper", "header:"+headerId)
+            node._lastWrapperId = headerId
+          } else {
+            let newHeaderId = "haeder"+lastHtag;
+
+            const nodeAttrTag = node.getAttribute('tag')
+            const nodePrevAttrTag = nodeToAddAfter?nodeToAddAfter.getAttribute('tag'):undefined
+            const nodePreveNextSiblingAttrTag = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('tag'): undefined
+            const nodePrevNextSiblingAttrWrapper = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('wrapper'):undefined
+
+            // if the header is the first node of nodeList 
+              if(!nodeToAddAfter){
+              newHeaderId = root.firstChild.nextSibling.getAttribute('wrapper')
+            }
+          
+            // if node has the "wrapper" attribute
+            // if header has old id don't change it
+            if(nodePrevNextSiblingAttrWrapper) {
+              newHeaderId = nodePrevNextSiblingAttrWrapper
+            }
+
+            // if new header added
+            if(nodeAttrTag !== nodePrevAttrTag){
+              newHeaderId = "haeder:"+uniqueHeaderId()
+            }
+
+            // if user use backspace for remove header char
+            if(nodeAttrTag === nodePreveNextSiblingAttrTag ){
+              // this "nodeToAddAfter.nextElementSibling" is the old dom elemnt that removed
+              newHeaderId = nodePrevNextSiblingAttrWrapper
+            }
+
+            if(newHeaderId){
+              node.setAttribute("wrapper", newHeaderId)
+            }
+              
+          }
         }
+
+        // if it's not header tag assign the wrraper id
+        if(lastHtag && !htags.includes(node.firstChild.nodeName)){
+          let wrapperId = "header:"+lastHtag
+          let nodeAttr = node.getAttribute('node')
+          if(nodeToAddAfter){
+            wrapperId = nodeToAddAfter.getAttribute('wrapper')
+          }
+
+          if(wrapperId) node.setAttribute("wrapper", wrapperId)
+
+          // if it's the last child of secction and the next node is h tag
+          if(
+            htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag')) ||
+            (nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
+          ) {
+            // top.console.log("yup this is wrong!")
+            nodeToAddAfter.removeAttribute('node')
+            node.setAttribute("node", "last")
+          }
+          
+        }
+        
+        if (!nodeToAddAfter) {
+          root.insertBefore(node, root.firstChild);
+        } else {
+          root.insertBefore(node, nodeToAddAfter.nextSibling);
+          const newNode = root.insertBefore(node, nodeToAddAfter.nextSibling);
+          const currentNodeWrapper = newNode.getAttribute('wrapper')
+          const nextNodeWrapper = nodeToAddAfter?nodeToAddAfter.getAttribute('wrapper') : undefined;
+          // if a text line change to header line
+          // if header line change to normal text line
+          // if it is header and it's a new header recursilvey append wrapper id
+          if(currentNodeWrapper !== nextNodeWrapper) {
+            // top.console.log("somethings bad is happening", currentNodeWrapper, nextNodeWrapper)
+            walkToClosestNextHeader(newNode.nextSibling, (nextDome) => {
+              if(currentNodeWrapper !== null) nextDome.setAttribute("wrapper", currentNodeWrapper)
+              else nextDome.removeAttribute("wrapper")
+            })
+          }
+        }
+
+      } catch (error) {
+        top.console.error("[view]:Header Catagorizer, ", error)
       }
       nodeToAddAfter = node;
       info.notifyAdded();
@@ -4057,78 +4062,83 @@ function Ace2Inner(editorInfo) {
 
     // by @Hossein
   // TODO: find a way to move into the plugin
-  customElements.define('wrt-inline-icon', class  extends HTMLElement {
+  try {
+    customElements.define('wrt-inline-icon', class  extends HTMLElement {
 			
-    connectedCallback() {
-      const shadow = this.attachShadow({mode: 'open'});
-      const headerId = this.getAttribute('headerId')
-      const style = `
-        .wrtcInlinIcon{
-          border: 1px solid #e6e8e9;
-          border-radius: 50%;
-          background: #fff;
-          box-shadow: 1px 1px 8px #e6e8e9;
-          outline: none;
-          width: 40px;
-          height: 40px;
-          transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-          display: flex;
-          align-items: center;
-          color: #333333;
-          justify-content: center;
-          cursor: pointer;
-        }
-        .wrtcInlinIcon.active svg{
-          color: #2678ff;
-        }
-        .wrtcInlinIcon:hover{
-          background-color: #2678ff;
-          color: #fff;
-        }
-        .wrtcInlinIcon:hover svg{
-          color: #fff;
-        }
-        .wrtcInlinIcon svg {
-          width: 16px;
-          height: 16px;
-        }
-        .wrtcInlinIcon.activeLoader .loader{
-          display: block;
-        }
-        .wrtcInlinIcon .loader {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #3498db;
-          border-radius: 50%;
-          animation: spin 2s linear infinite;
-          padding: 16px;
-          position: absolute;
-          z-index: 2;
-          background: transparent;
-          left: -1px;
-          top: -1px;
-          display: none;
-        }
-  
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `
-  
-      const content = `
-        <button class="btn_roomHandler wrtcInlinIcon ${headerId}" data-action="JOIN" data-id="${headerId}"data-join="PLUS">
-          <span class="loader"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"></path></svg>
-        </button>
-      `
-  
-      shadow.innerHTML = `
-        <style>${style}</style>
-        ${content}
-      `;
-    }
-  
-  });
+      connectedCallback() {
+        const shadow = this.attachShadow({mode: 'open'});
+        const headerId = this.getAttribute('headerId')
+        const style = `
+          .wrtcInlinIcon{
+            border: 1px solid #e6e8e9;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 1px 1px 8px #e6e8e9;
+            outline: none;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            align-items: center;
+            color: #333333;
+            justify-content: center;
+            cursor: pointer;
+          }
+          .wrtcInlinIcon.active svg{
+            color: #2678ff;
+          }
+          .wrtcInlinIcon:hover{
+            background-color: #2678ff;
+            color: #fff;
+          }
+          .wrtcInlinIcon:hover svg{
+            color: #fff;
+          }
+          .wrtcInlinIcon svg {
+            width: 16px;
+            height: 16px;
+          }
+          .wrtcInlinIcon.activeLoader .loader{
+            display: block;
+          }
+          .wrtcInlinIcon .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            padding: 16px;
+            position: absolute;
+            z-index: 2;
+            background: transparent;
+            left: -1px;
+            top: -1px;
+            display: none;
+          }
+    
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `
+    
+        const content = `
+          <button class="btn_roomHandler wrtcInlinIcon ${headerId}" data-action="JOIN" data-id="${headerId}"data-join="PLUS">
+            <span class="loader"></span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"></path></svg>
+          </button>
+        `
+    
+        shadow.innerHTML = `
+          <style>${style}</style>
+          ${content}
+        `;
+      }
+    
+    });
+  } catch (error) {
+    top.console.log("[wrtc]: shadow dom,", error)
+  }
+
 }
 
 exports.init = (editorInfo, cb) => {
