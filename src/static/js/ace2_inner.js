@@ -1407,7 +1407,7 @@ function Ace2Inner(editorInfo) {
           } else {
             let newHeaderId = "haeder"+lastHtag;
 
-            const nodeAttrTag = node.getAttribute('tag')
+            const nodeAttrTag =node? node.getAttribute('tag'):undefined
             const nodePrevAttrTag = nodeToAddAfter?nodeToAddAfter.getAttribute('tag'):undefined
             const nodePreveNextSiblingAttrTag = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('tag'): undefined
             const nodePrevNextSiblingAttrWrapper = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('wrapper'):undefined
@@ -1444,7 +1444,6 @@ function Ace2Inner(editorInfo) {
         // if it's not header tag assign the wrraper id
         if(lastHtag && !htags.includes(node.firstChild.nodeName)){
           let wrapperId = "header:"+lastHtag
-          let nodeAttr = node.getAttribute('node')
           if(nodeToAddAfter){
             wrapperId = nodeToAddAfter.getAttribute('wrapper')
           }
@@ -1453,7 +1452,7 @@ function Ace2Inner(editorInfo) {
 
           // if it's the last child of secction and the next node is h tag
           if(
-            htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag')) ||
+            (nodeToAddAfter.nextSibling&& htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag'))) ||
             (nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
           ) {
             // top.console.log("yup this is wrong!")
