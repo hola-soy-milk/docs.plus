@@ -4062,9 +4062,9 @@ function Ace2Inner(editorInfo) {
     // by @Hossein
   // TODO: find a way to move into the plugin
   try {
-    customElements.define('wrt-inline-icon', class  extends HTMLElement {
-			
-      connectedCallback() {
+    class WrtInlineIcon extends HTMLElement {
+      constructor() {
+        super();
         const shadow = this.attachShadow({mode: 'open'});
         const headerId = this.getAttribute('headerId')
         const style = `
@@ -4132,8 +4132,9 @@ function Ace2Inner(editorInfo) {
           ${content}
         `;
       }
-    
-    });
+    }
+    // Define the new element
+    customElements.define('wrt-inline-icon', WrtInlineIcon);
   } catch (error) {
     top.console.log("[wrtc]: shadow dom,", error)
   }
