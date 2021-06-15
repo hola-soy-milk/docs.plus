@@ -45,7 +45,7 @@ jobs:
         https://github.com/samirsayyad/ep_table_of_contents#326ccfc
         https://github.com/HMarzban/ep_wrtc_heading#09f2f2b
         https://github.com/ether/ep_sticky_attributes.git
-        https://github.com/HMarzban/ep_headerview#0872a8c
+        https://github.com/HMarzban/ep_headerview#19c7a5a
 
     - name: Install all dependencies and symlink for ep_etherpad-lite
       run: src/bin/installDeps.sh
