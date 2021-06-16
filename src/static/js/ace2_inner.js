@@ -1496,12 +1496,12 @@ function Ace2Inner(editorInfo) {
         } else {
           root.insertBefore(node, nodeToAddAfter.nextSibling);
 
-          // if(!initialInsert){
-          //   const parentId = nodeToAddAfter.getAttribute('parentid');
-          //   const sectionId = nodeToAddAfter.getAttribute('sectionId');
-          //   node.setAttribute('parentid', parentId);
-          //   node.setAttribute("sectionId", sectionId);
-          // }
+          if(!initialInsert){
+            const parentId = nodeToAddAfter.getAttribute('parentid');
+            const sectionId = nodeToAddAfter.getAttribute('sectionId');
+            node.setAttribute('parentid', parentId);
+            node.setAttribute("sectionId", sectionId);
+          }
 
           const newNode = root.insertBefore(node, nodeToAddAfter.nextSibling);
           const currentNodeWrapper = newNode.getAttribute('wrapper')
