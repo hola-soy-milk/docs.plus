@@ -1386,15 +1386,17 @@ function Ace2Inner(editorInfo) {
 
         // top.console.log(node, nodeToAddAfter, hasHtagbefor , node.attributes,node.attributes.hasOwnProperty('tag'))
         // by defualt assign first child nodeName as "tag" attribute
-        node.setAttribute("tag", node.firstChild.nodeName.toLowerCase());
+        node.setAttribute("tag22", node.firstChild.nodeName.toLowerCase());
+
+        node.setAttribute("contenteditable", false)
 
         if (initialInsert) {
           if (htags.includes(node.firstChild.nodeName)) {
             const currentHIndex = htags.indexOf(node.firstChild.nodeName);
             hSectionId = node.firstChild.getAttribute("data-id")
-
+            
             if(!hParentId) hParentId = hSectionId;
-
+            
             if (hParentIndex > currentHIndex) {
               hParentId = node.firstChild.getAttribute("data-id");
               node.setAttribute("partNode", "first")
@@ -1403,8 +1405,9 @@ function Ace2Inner(editorInfo) {
                 nodeToAddAfter.setAttribute("partNode", "last")
               }
             }
-
+            
             hParentIndex = currentHIndex;
+            node.contentEditable = 'false'
           }
 
           if (hParentId) {
@@ -1503,7 +1506,11 @@ function Ace2Inner(editorInfo) {
             node.setAttribute("sectionId", sectionId);
           }
 
+
+
           const newNode = root.insertBefore(node, nodeToAddAfter.nextSibling);
+
+
           const currentNodeWrapper = newNode.getAttribute('wrapper')
           const nextNodeWrapper = nodeToAddAfter?nodeToAddAfter.getAttribute('wrapper') : undefined;
           // if a text line change to header line
