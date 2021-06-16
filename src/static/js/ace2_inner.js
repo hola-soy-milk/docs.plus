@@ -1388,8 +1388,6 @@ function Ace2Inner(editorInfo) {
         // by defualt assign first child nodeName as "tag" attribute
         node.setAttribute("tag22", node.firstChild.nodeName.toLowerCase());
 
-        node.setAttribute("contenteditable", false)
-
         if (initialInsert) {
           if (htags.includes(node.firstChild.nodeName)) {
             const currentHIndex = htags.indexOf(node.firstChild.nodeName);
@@ -1407,7 +1405,6 @@ function Ace2Inner(editorInfo) {
             }
             
             hParentIndex = currentHIndex;
-            node.contentEditable = 'false'
           }
 
           if (hParentId) {
