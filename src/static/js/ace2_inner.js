@@ -1386,7 +1386,7 @@ function Ace2Inner(editorInfo) {
 
         // top.console.log(node, nodeToAddAfter, hasHtagbefor , node.attributes,node.attributes.hasOwnProperty('tag'))
         // by defualt assign first child nodeName as "tag" attribute
-        node.setAttribute("tag22", node.firstChild.nodeName.toLowerCase());
+        node.setAttribute("tag", node.firstChild.nodeName.toLowerCase());
 
         if (initialInsert) {
           if (htags.includes(node.firstChild.nodeName)) {
