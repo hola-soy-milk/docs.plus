@@ -1408,7 +1408,6 @@ function Ace2Inner(editorInfo) {
           }
 
           if (hParentId) {
-            top.console.log("what happend", hParentId)
             node.setAttribute("parentId", hParentId);
             node.setAttribute("sectionId", hSectionId);
           }
