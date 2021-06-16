@@ -1322,10 +1322,6 @@ function Ace2Inner(editorInfo) {
 
   // heading hierarchy
   // By @Hossein
-  let hParentIndex = 0;
-  let hParentId = undefined;
-  let hSectionId = undefined;
-  
   let lastHtag;
   let _nextHeaderId = 1;
   const htags = ["H1", "H2", "H3", "H4", "H5", "H6"]
@@ -1343,6 +1339,10 @@ function Ace2Inner(editorInfo) {
     }
   }
 
+  let hParentIndex = 0;
+  let hParentId = undefined;
+  let hSectionId = undefined;
+
   // By @Hossein
   const insertDomLines = (nodeToAddAfter, infoStructs) => {
     let lastEntry;
@@ -1351,7 +1351,7 @@ function Ace2Inner(editorInfo) {
     infoStructs.length === 1 ? initialInsert = false : initialInsert = true;
     
     if (infoStructs.length < 1) return;
-    infoStructs.forEach((info) => {
+    infoStructs.forEach((info, index) => {
       const p2 = PROFILER('insertLine', false); // eslint-disable-line new-cap
       const node = info.node;
       const key = uniqueId(node);
@@ -1381,7 +1381,7 @@ function Ace2Inner(editorInfo) {
 
       try {
         //======================================//
-        //====== Header Catagorizer v1.3 =======//
+        //====== Header Catagorizer v1.4 =======//
         //======================================//
 
         // top.console.log(node, nodeToAddAfter, hasHtagbefor , node.attributes,node.attributes.hasOwnProperty('tag'))
@@ -1389,19 +1389,18 @@ function Ace2Inner(editorInfo) {
         node.setAttribute("tag", node.firstChild.nodeName.toLowerCase());
 
         if (initialInsert) {
-
           if (htags.includes(node.firstChild.nodeName)) {
-
             const currentHIndex = htags.indexOf(node.firstChild.nodeName);
-            hSectionId = node.firstChild.getAttribute("data-id");
+            hSectionId = node.firstChild.getAttribute("data-id")
 
-            if (hParentIndex >= currentHIndex) {
+            if(!hParentId) hParentId = hSectionId;
+
+            if (hParentIndex > currentHIndex) {
               hParentId = node.firstChild.getAttribute("data-id");
               node.setAttribute("partNode", "first")
               
               if(nodeToAddAfter){
                 nodeToAddAfter.setAttribute("partNode", "last")
-                top.console.log("HI MAN WHAT:SU")
               }
             }
 
@@ -1409,12 +1408,11 @@ function Ace2Inner(editorInfo) {
           }
 
           if (hParentId) {
+            top.console.log("what happend", hParentId)
             node.setAttribute("parentId", hParentId);
             node.setAttribute("sectionId", hSectionId);
           }
-
         }
-
 
         // If the node is H tags
         // then assign uniqe header ID
@@ -1499,12 +1497,12 @@ function Ace2Inner(editorInfo) {
         } else {
           root.insertBefore(node, nodeToAddAfter.nextSibling);
 
-          if(!initialInsert){
-            const parentId = nodeToAddAfter.getAttribute('parentid');
-            const sectionId = nodeToAddAfter.getAttribute('sectionId');
-            node.setAttribute('parentid', parentId);
-            node.setAttribute("sectionId", sectionId);
-          }
+          // if(!initialInsert){
+          //   const parentId = nodeToAddAfter.getAttribute('parentid');
+          //   const sectionId = nodeToAddAfter.getAttribute('sectionId');
+          //   node.setAttribute('parentid', parentId);
+          //   node.setAttribute("sectionId", sectionId);
+          // }
 
           const newNode = root.insertBefore(node, nodeToAddAfter.nextSibling);
           const currentNodeWrapper = newNode.getAttribute('wrapper')
