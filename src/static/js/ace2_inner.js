@@ -1340,8 +1340,12 @@ function Ace2Inner(editorInfo) {
   }
 
   let hParentIndex = 0;
-  let hParentId = undefined;
   let hSectionId = undefined;
+  let hTitleId = undefined;
+  let hTitleIndex = undefined;
+
+  let ltestHsId = {"0": "", "1": "", "2": "", "3": "", "4": "", "5": "", "preserve": ""}
+  let currentHIndex = undefined;
 
   // By @Hossein
   const insertDomLines = (nodeToAddAfter, infoStructs) => {
@@ -1381,7 +1385,7 @@ function Ace2Inner(editorInfo) {
 
       try {
         //======================================//
-        //====== Header Catagorizer v1.4 =======//
+        //====== Header Catagorizer v2.0 =======//
         //======================================//
 
         // top.console.log(node, nodeToAddAfter, hasHtagbefor , node.attributes,node.attributes.hasOwnProperty('tag'))
@@ -1389,107 +1393,62 @@ function Ace2Inner(editorInfo) {
         node.setAttribute("tag22", node.firstChild.nodeName.toLowerCase());
 
         if (initialInsert) {
+
           if (htags.includes(node.firstChild.nodeName)) {
-            const currentHIndex = htags.indexOf(node.firstChild.nodeName);
+            currentHIndex = htags.indexOf(node.firstChild.nodeName);
             hSectionId = node.firstChild.getAttribute("data-id")
-            
-            if(!hParentId) hParentId = hSectionId;
-            
-            if (hParentIndex > currentHIndex) {
-              hParentId = node.firstChild.getAttribute("data-id");
-              node.setAttribute("partNode", "first")
-              
-              if(nodeToAddAfter){
-                nodeToAddAfter.setAttribute("partNode", "last")
-              }
+            if(!hTitleId) hTitleId = hSectionId
+  
+            if(!ltestHsId.preserve) {
+              ltestHsId.preserve = currentHIndex
+              ltestHsId[currentHIndex] = hSectionId
             }
-            
+  
+            if(Math.abs(ltestHsId.preserve - currentHIndex) >= 0 ){
+              ltestHsId[currentHIndex] =  hSectionId
+              ltestHsId.preserve = currentHIndex
+            }
+            // set First H text as a title index
+            if(hTitleIndex == undefined) hTitleIndex = currentHIndex
+  
+            if(currentHIndex === hTitleIndex) {
+              hTitleId = hSectionId
+            }
+  
             hParentIndex = currentHIndex;
           }
-
-          if (hParentId) {
-            node.setAttribute("parentId", hParentId);
-            node.setAttribute("sectionId", hSectionId);
-          }
-        }
+  
+          node.setAttribute("titleId", hTitleId)  
+          node.setAttribute("sectionId", hSectionId);
+          ltestHsId[0]&&node.setAttribute("lrh0", ltestHsId[0])    
+          ltestHsId[1]&&node.setAttribute("lrh1", ltestHsId[1])    
+          ltestHsId[2]&&node.setAttribute("lrh2", ltestHsId[2])    
+          ltestHsId[3]&&node.setAttribute("lrh3", ltestHsId[3])    
+          ltestHsId[4]&&node.setAttribute("lrh4", ltestHsId[4])    
+          ltestHsId[5]&&node.setAttribute("lrh5", ltestHsId[5])    
+          ltestHsId[6]&&node.setAttribute("lrh6", ltestHsId[6])   
+        } 
 
         // If the node is H tags
         // then assign uniqe header ID
         if(htags.includes(node.firstChild.nodeName)) {
-      
           // if it's a h tags
           // node.classList.add("first")
           node.setAttribute("node", "first")
           nodeToAddAfter&&nodeToAddAfter.setAttribute("node", "last")
-          todo:
-
-          //TODO: if the last node remove the prev node must be mark
-          //TODO: if user press enter in h tag, headerId will be change, this should not happening.
-
-          // If it's the initaionl setup, and it's header
-          if(initialInsert){
-            const headerId = uniqueHeaderId()
-            lastHtag = headerId
-            node.setAttribute("wrapper", "header:"+headerId)
-            node._lastWrapperId = headerId
-          } else {
-            let newHeaderId = "haeder"+lastHtag;
-
-            const nodeAttrTag =node? node.getAttribute('tag'):undefined
-            const nodePrevAttrTag = nodeToAddAfter?nodeToAddAfter.getAttribute('tag'):undefined
-            const nodePreveNextSiblingAttrTag = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('tag'): undefined
-            const nodePrevNextSiblingAttrWrapper = nodeToAddAfter?nodeToAddAfter.nextSibling.getAttribute('wrapper'):undefined
-
-            // if the header is the first node of nodeList 
-              if(!nodeToAddAfter){
-              newHeaderId = root.firstChild.nextSibling.getAttribute('wrapper')
-              node.setAttribute("parentId", node.firstChild.getAttribute("data-id"))
-            }
-          
-            // if node has the "wrapper" attribute
-            // if header has old id don't change it
-            if(nodePrevNextSiblingAttrWrapper) {
-              newHeaderId = nodePrevNextSiblingAttrWrapper
-            }
-
-            // if new header added
-            if(nodeAttrTag !== nodePrevAttrTag){
-              newHeaderId = "haeder:"+uniqueHeaderId()
-            }
-
-            // if user use backspace for remove header char
-            if(nodeAttrTag === nodePreveNextSiblingAttrTag ){
-              // this "nodeToAddAfter.nextElementSibling" is the old dom elemnt that removed
-              newHeaderId = nodePrevNextSiblingAttrWrapper
-            }
-
-            if(newHeaderId){
-              node.setAttribute("wrapper", newHeaderId)
-            }
-              
-          }
-        }
-
-        // if it's not header tag assign the wrraper id
-        if(lastHtag && !htags.includes(node.firstChild.nodeName)){
-          let wrapperId = "header:"+lastHtag
-          if(nodeToAddAfter){
-            wrapperId = nodeToAddAfter.getAttribute('wrapper')
-          }
-
-          if(wrapperId) node.setAttribute("wrapper", wrapperId)
-
+        } else {
           // if it's the last child of secction and the next node is h tag
           if(
-            (nodeToAddAfter.nextSibling&& htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag'))) ||
-            (nodeToAddAfter.nextSibling&&nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
+            nodeToAddAfter&&nodeToAddAfter.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.getAttribute('tag')) ||
+            (nodeToAddAfter&&nodeToAddAfter.nextSibling&&nodeToAddAfter.nextSibling.nextSibling&&htags.map(x=>x.toLowerCase()).includes(nodeToAddAfter.nextSibling.nextSibling.getAttribute('tag')))
           ) {
             // top.console.log("yup this is wrong!")
             nodeToAddAfter.removeAttribute('node')
             node.setAttribute("node", "last")
           }
-          
         }
+
+
         
         if (!nodeToAddAfter) {
           root.insertBefore(node, root.firstChild);
@@ -1497,29 +1456,17 @@ function Ace2Inner(editorInfo) {
           root.insertBefore(node, nodeToAddAfter.nextSibling);
 
           if(!initialInsert){
-            const parentId = nodeToAddAfter.getAttribute('parentid');
-            const sectionId = nodeToAddAfter.getAttribute('sectionId');
-            node.setAttribute('parentid', parentId);
-            node.setAttribute("sectionId", sectionId);
+            node.setAttribute("sectionId", nodeToAddAfter.getAttribute('sectionId'));
+            node.setAttribute("titleId", nodeToAddAfter.getAttribute('titleId'));
+            node.setAttribute("lrh0", nodeToAddAfter.getAttribute('lrh0'));
+            node.setAttribute("lrh1", nodeToAddAfter.getAttribute('lrh1'));
+            node.setAttribute("lrh2", nodeToAddAfter.getAttribute('lrh2'));
+            node.setAttribute("lrh3", nodeToAddAfter.getAttribute('lrh3'));
+            node.setAttribute("lrh4", nodeToAddAfter.getAttribute('lrh4'));
+            node.setAttribute("lrh5", nodeToAddAfter.getAttribute('lrh5'));
+            node.setAttribute("lrh6", nodeToAddAfter.getAttribute('lrh6'));
           }
 
-
-
-          const newNode = root.insertBefore(node, nodeToAddAfter.nextSibling);
-
-
-          const currentNodeWrapper = newNode.getAttribute('wrapper')
-          const nextNodeWrapper = nodeToAddAfter?nodeToAddAfter.getAttribute('wrapper') : undefined;
-          // if a text line change to header line
-          // if header line change to normal text line
-          // if it is header and it's a new header recursilvey append wrapper id
-          if(currentNodeWrapper !== nextNodeWrapper) {
-            // top.console.log("somethings bad is happening", currentNodeWrapper, nextNodeWrapper)
-            walkToClosestNextHeader(newNode.nextSibling, (nextDome) => {
-              if(currentNodeWrapper !== null) nextDome.setAttribute("wrapper", currentNodeWrapper)
-              else nextDome.removeAttribute("wrapper")
-            })
-          }
         }
 
       } catch (error) {
