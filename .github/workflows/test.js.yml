@@ -45,7 +45,8 @@ jobs:
         https://github.com/samirsayyad/ep_table_of_contents#326ccfc
         https://github.com/samirsayyad/ep_headings2.git
         https://github.com/ether/ep_sticky_attributes.git
-        https://github.com/HMarzban/ep_headerview#c201dd9
+        https://github.com/HMarzban/ep_headerview#2fd1e4d
+
 
     - name: Install all dependencies and symlink for ep_etherpad-lite
       run: src/bin/installDeps.sh
