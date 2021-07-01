@@ -1404,7 +1404,7 @@ function Ace2Inner(editorInfo) {
               ltestHsId[currentHIndex] = hSectionId
             }
   
-            if(Math.abs(ltestHsId.preserve - currentHIndex) >= 0 ){
+            if(Math.abs(ltestHsId.preserve - currentHIndex) >= 0 || ltestHsId.preserve === currentHIndex ){
               ltestHsId[currentHIndex] =  hSectionId
               ltestHsId.preserve = currentHIndex
             }
