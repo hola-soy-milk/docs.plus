@@ -1352,7 +1352,7 @@ function Ace2Inner(editorInfo) {
     let lastEntry;
     let lineStartOffset;
     let initialInsert = false
-    infoStructs.length === 1 ? initialInsert = false : initialInsert = true;
+    infoStructs.length >= 1 && infoStructs.length <= 2 ? initialInsert = false : initialInsert = true;
     
     if (infoStructs.length < 1) return;
     infoStructs.forEach((info, index) => {
